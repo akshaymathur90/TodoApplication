@@ -1,4 +1,4 @@
-package edu.sjsu.todoapp;
+package edu.sjsu.todoapp.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,16 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
+import edu.sjsu.todoapp.R;
+import edu.sjsu.todoapp.model.ToDoItem;
 import edu.sjsu.todoapp.database.TodoItemDbHelper;
-import edu.sjsu.todoapp.database.TodoItemDbUtils;
 
 /**
  * Created by akshaymathur on 8/11/17.

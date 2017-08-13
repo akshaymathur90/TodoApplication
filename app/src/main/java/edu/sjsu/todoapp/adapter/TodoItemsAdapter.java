@@ -1,10 +1,9 @@
-package edu.sjsu.todoapp;
+package edu.sjsu.todoapp.adapter;
 
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.sjsu.todoapp.database.TodoItemDbUtils;
+import edu.sjsu.todoapp.R;
+import edu.sjsu.todoapp.fragments.AddorEditItemFragment;
+import edu.sjsu.todoapp.model.ToDoItem;
 
 /**
  * Created by akshaymathur on 8/11/17.

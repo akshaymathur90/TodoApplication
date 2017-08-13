@@ -1,8 +1,11 @@
-package edu.sjsu.todoapp;
+package edu.sjsu.todoapp.activity;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import edu.sjsu.todoapp.R;
+import edu.sjsu.todoapp.fragments.TodoListFragment;
 
 public class MainActivity extends AppCompatActivity {
 

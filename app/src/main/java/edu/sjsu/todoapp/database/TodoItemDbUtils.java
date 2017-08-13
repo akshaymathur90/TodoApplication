@@ -1,14 +1,13 @@
 package edu.sjsu.todoapp.database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.sjsu.todoapp.ToDoItem;
+import edu.sjsu.todoapp.model.ToDoItem;
 
 /**
  * Created by akshaymathur on 8/12/17.

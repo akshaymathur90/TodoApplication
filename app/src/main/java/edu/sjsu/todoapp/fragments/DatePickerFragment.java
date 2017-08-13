@@ -1,4 +1,4 @@
-package edu.sjsu.todoapp;
+package edu.sjsu.todoapp.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;

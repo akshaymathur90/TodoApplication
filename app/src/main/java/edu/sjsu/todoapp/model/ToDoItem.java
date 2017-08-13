@@ -1,4 +1,4 @@
-package edu.sjsu.todoapp;
+package edu.sjsu.todoapp.model;
 
 import java.io.Serializable;
 
