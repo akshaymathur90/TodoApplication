@@ -11,4 +11,5 @@
     <string name="text_ok">Ok</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_due_date">Due Date</string>
+    <string name="text_due">Due:</string>
 </resources>

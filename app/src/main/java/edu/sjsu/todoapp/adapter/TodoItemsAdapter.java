@@ -67,6 +67,7 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
         //ToDoItem toDoItem = mToDoItemList.get(position);
         final ToDoItem item = mToDoItemList.get(position);
         holder.itemTitle.setText(item.getItemName());
+        holder.itemDue.setText(item.getDateDue());
         holder.itemTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,9 +95,11 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
     public class TodoItemsViewHolder extends RecyclerView.ViewHolder{
 
         TextView itemTitle;
+        TextView itemDue;
         TodoItemsViewHolder(View view){
             super(view);
             itemTitle = (TextView) view.findViewById(R.id.todo_item_title);
+            itemDue = (TextView) view.findViewById(R.id.todo_list_item_due);
         }
     }
 }
