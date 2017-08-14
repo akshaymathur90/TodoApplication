@@ -1,6 +1,7 @@
 package edu.sjsu.todoapp.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -84,7 +85,9 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
         holder.itemDue.setText(item.getDateDue());
         Log.d(TAG,"Item priority--> "+item.getPriority());
         Log.d(TAG,"Item color--> "+mPriorityColorMap.get(item.getPriority()));
-        holder.itemPriority.setBackgroundColor(ContextCompat.getColor(mContext,mPriorityColorMap.get(item.getPriority())));
+        GradientDrawable gradientDrawable = (GradientDrawable) holder.itemPriority.getBackground();
+        gradientDrawable.setColor(ContextCompat.getColor(mContext,mPriorityColorMap.get(item.getPriority())));
+        holder.itemPriority.setText(getPriorityString(item.getPriority()));
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +107,15 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
         });
     }
 
+    public String getPriorityString(int priority){
+        switch (priority){
+            case 1: return "L";
+            case 2: return "M";
+            case 3: return "H";
+            default: return null;
+        }
+    }
+
     @Override
     public int getItemCount() {
         return mToDoItemList.size();
@@ -113,13 +125,13 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
 
         TextView itemTitle;
         TextView itemDue;
-        LinearLayout itemPriority;
+        TextView itemPriority;
         LinearLayout itemLayout;
         TodoItemsViewHolder(View view){
             super(view);
             itemTitle = (TextView) view.findViewById(R.id.todo_item_title);
             itemDue = (TextView) view.findViewById(R.id.todo_list_item_due);
-            itemPriority = (LinearLayout) view.findViewById(R.id.priority_image_view);
+            itemPriority = (TextView) view.findViewById(R.id.priority_text);
             itemLayout = (LinearLayout) view.findViewById(R.id.todo_item_layout);
         }
     }
