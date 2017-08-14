@@ -28,3 +28,13 @@ Here's a walkthrough of implemented user stories:
 <img src='http://i.imgur.com/vUWl5rd.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+**Question 1:** "What are your reactions to the Android app development platform so far? Compare and contrast Android's approach to layouts and user interfaces in past platforms you've used."
+
+**Answer:** Android App development is quite interesting. The platform helps us bring content and services directly to the consumers palms. It also helps us leverage smartphone features to improve user experience publish inovative apps.
+  Android's layout and user interface approach using XML seems similar to designing web pages using HTML. Someone with a background in developing Web Apps can easily switch to Android Development. The SDK provides lots of widgits to develop rich and responsive UI.
+
+**Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
+
+**Answer:** Adapter is something which know about the data that has to be displayed as well the how to represent the data on the screen. Adapters are important because they help us represent our data in custom views. 
+convertView paramenter helps us to reuse old view thus decreasing the memory pressure.
