@@ -18,5 +18,6 @@ public final class TodoItemEntryContract {
         public static final String COLUMN_NAME_CREATED_DATE = "createddate";
         public static final String COLUMN_NAME_EDITED_DATE = "editeddate";
         public static final String COLUMN_NAME_ASSIGNED_TO = "assignedto";
+        public static final String COLUMN_NAME_PRIORITY = "priority";
     }
 }

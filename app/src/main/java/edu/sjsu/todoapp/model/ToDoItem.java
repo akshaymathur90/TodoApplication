@@ -15,6 +15,7 @@ public class ToDoItem implements Serializable{
     private String mDateDue;
     private long mID;
     private String mAssignedTo;
+    private int mPriority;
 
     public ToDoItem(String itemName, String itemDescription, String dateCreated, String dateEdited, String dateDue, int ID, String assignedTo) {
         mItemName = itemName;
@@ -82,5 +83,13 @@ public class ToDoItem implements Serializable{
 
     public void setAssignedTo(String assignedTo) {
         mAssignedTo = assignedTo;
+    }
+
+    public int getPriority() {
+        return mPriority;
+    }
+
+    public void setPriority(int priority) {
+        mPriority = priority;
     }
 }

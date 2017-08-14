@@ -19,7 +19,8 @@ public class TodoItemDbHelper extends SQLiteOpenHelper {
                     TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_ASSIGNED_TO + " TEXT," +
                     TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_DUE_DATE + " TEXT," +
                     TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_CREATED_DATE + " TEXT," +
-                    TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE + " TEXT" +
+                    TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE + " TEXT," +
+                    TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY + " TEXT" +
                     ")";
 
     private static final String SQL_DELETE_ENTRIES =

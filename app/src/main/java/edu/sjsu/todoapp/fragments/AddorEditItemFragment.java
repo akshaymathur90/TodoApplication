@@ -10,9 +10,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.support.v7.widget.PopupMenu;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.sjsu.todoapp.R;
 import edu.sjsu.todoapp.model.ToDoItem;
@@ -36,7 +40,7 @@ public class AddorEditItemFragment extends DialogFragment {
     ToDoItem mToDoItem = null;
 
     public TextView mTitleTextView;
-    public TextInputEditText mItemTitle,mItemAssignedTo,mItemDueDate;
+    public TextInputEditText mItemTitle,mItemAssignedTo,mItemDueDate, mItemPriority;
     public AppCompatMultiAutoCompleteTextView mItemDesciption;
     public AppCompatButton mCancelButton, mOkButton;
     public TextInputLayout mTitleLayout;
@@ -46,6 +50,7 @@ public class AddorEditItemFragment extends DialogFragment {
     private static final int REQUEST_DATE = 0;
     SQLiteDatabase db;
     int mode;
+    Map<String,Integer> priorityMap;
 
     /*public static AddorEditItemFragment newAddInstance(){
         return new AddorEditItemFragment();
@@ -72,6 +77,10 @@ public class AddorEditItemFragment extends DialogFragment {
         }
         TodoItemDbHelper dbHelper = new TodoItemDbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
+        priorityMap =new HashMap<>();
+        priorityMap.put("Low",1);
+        priorityMap.put("Medium",2);
+        priorityMap.put("High",3);
     }
 
     @Nullable
@@ -86,6 +95,7 @@ public class AddorEditItemFragment extends DialogFragment {
         mCancelButton = (AppCompatButton) v.findViewById(R.id.todo_item_cancel_button);
         mOkButton = (AppCompatButton) v.findViewById(R.id.todo_item_ok_button);
         mTitleLayout = (TextInputLayout) v.findViewById(R.id.todo_item_title_layout);
+        mItemPriority = (TextInputEditText) v.findViewById(R.id.todo_item_priority_text);
         mTitleTextView.setText(mDialogTitle);
 
         mCancelButton.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +129,7 @@ public class AddorEditItemFragment extends DialogFragment {
             mItemDueDate.setText(mToDoItem.getDateDue());
             mItemAssignedTo.setText(mToDoItem.getAssignedTo());
             mItemDesciption.setText(mToDoItem.getItemDescription());
+            mItemPriority.setText(getPriorityString(mToDoItem.getPriority()));
 
         }
         else{
@@ -127,6 +138,7 @@ public class AddorEditItemFragment extends DialogFragment {
             String date = dateFormat.format(calendar.getTime());
             Log.d(TAG,"Today's date is--> "+date);
             mItemDueDate.setText(date);
+            mItemPriority.setText(getPriorityString(1));
         }
 
         mItemDueDate.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +147,35 @@ public class AddorEditItemFragment extends DialogFragment {
                 DialogFragment newFragment = new DatePickerFragment();
                 newFragment.setTargetFragment(AddorEditItemFragment.this,REQUEST_DATE);
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+            }
+        });
+        mItemPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(getActivity(), mItemDueDate);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popup_priority_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.menu_item_high:
+                                mItemPriority.setText(R.string.text_high);
+                                break;
+                            case R.id.menu_item_medium:
+                                mItemPriority.setText(R.string.text_medium);
+                                break;
+                            case R.id.menu_item_low:
+                                mItemPriority.setText(R.string.text_low);
+                                break;
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
             }
         });
         return v;
@@ -146,6 +187,18 @@ public class AddorEditItemFragment extends DialogFragment {
             return false;
         }
         return true;
+    }
+
+    public int getPriorityValue(String priority){
+        return priorityMap.get(priority);
+    }
+    public String getPriorityString(int priority){
+        switch (priority){
+            case 1: return "Low";
+            case 2: return "Medium";
+            case 3: return "High";
+            default: return null;
+        }
     }
     private void addItem() {
 
@@ -159,6 +212,7 @@ public class AddorEditItemFragment extends DialogFragment {
         newItem.setDateCreated(date);
         newItem.setAssignedTo(mItemAssignedTo.getText().toString());
         newItem.setDateDue(mItemDueDate.getText().toString());
+        newItem.setPriority(getPriorityValue(mItemPriority.getText().toString()));
 
 
         if(getTargetFragment()!=null){
@@ -180,6 +234,7 @@ public class AddorEditItemFragment extends DialogFragment {
         newItem.setAssignedTo(mItemAssignedTo.getText().toString());
         newItem.setDateDue(mItemDueDate.getText().toString());
         newItem.setID(mToDoItem.getID());
+        newItem.setPriority(getPriorityValue(mItemPriority.getText().toString()));
 
 
         if(getTargetFragment()!=null){

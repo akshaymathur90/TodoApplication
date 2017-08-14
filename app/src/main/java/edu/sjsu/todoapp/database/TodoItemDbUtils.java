@@ -23,8 +23,11 @@ public class TodoItemDbUtils {
                 TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE,
                 TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_CREATED_DATE,
                 TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_DUE_DATE,
-                TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_ASSIGNED_TO
+                TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_ASSIGNED_TO,
+                TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY
         };
+        String sortOrder =
+                TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY + " DESC";
 
         Cursor cursor = db.query(
                 TodoItemEntryContract.TodoItemEntry.TABLE_NAME,                     // The table to query
@@ -33,7 +36,7 @@ public class TodoItemDbUtils {
                 null,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
-                null                                 // The sort order
+                sortOrder                                 // The sort order
         );
 
         List<ToDoItem> toDoItems = new ArrayList<>();
@@ -53,6 +56,8 @@ public class TodoItemDbUtils {
                     TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE)));
             item.setItemDescription(cursor.getString(cursor.getColumnIndexOrThrow(
                     TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_DESC)));
+            item.setPriority(cursor.getInt(cursor.getColumnIndexOrThrow(
+                    TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY)));
             toDoItems.add(item);
         }
         cursor.close();
@@ -70,6 +75,7 @@ public class TodoItemDbUtils {
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_CREATED_DATE, toDoItem.getDateCreated());
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_DUE_DATE, toDoItem.getDateDue());
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE, toDoItem.getDateEdited());
+        values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY, toDoItem.getPriority());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(TodoItemEntryContract.TodoItemEntry.TABLE_NAME, null, values);
@@ -96,6 +102,7 @@ public class TodoItemDbUtils {
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_CREATED_DATE, toDoItem.getDateCreated());
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_DUE_DATE, toDoItem.getDateDue());
         values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_EDITED_DATE, toDoItem.getDateEdited());
+        values.put(TodoItemEntryContract.TodoItemEntry.COLUMN_NAME_PRIORITY, toDoItem.getPriority());
 
         // Which row to update, based on the title
         String selection = TodoItemEntryContract.TodoItemEntry._ID + " LIKE ?";

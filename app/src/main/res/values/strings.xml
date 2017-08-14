@@ -12,4 +12,8 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_due_date">Due Date</string>
     <string name="text_due">Due:</string>
+    <string name="text_priority">Select Priority</string>
+    <string name="text_high">High</string>
+    <string name="text_medium">Medium</string>
+    <string name="text_low">Low</string>
 </resources>
