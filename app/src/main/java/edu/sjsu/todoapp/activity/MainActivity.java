@@ -1,8 +1,10 @@
 package edu.sjsu.todoapp.activity;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import edu.sjsu.todoapp.R;
 import edu.sjsu.todoapp.fragments.TodoListFragment;
@@ -15,10 +17,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TodoListFragment todoListFragment = TodoListFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if(fragment == null){
+            fragment = TodoListFragment.newInstance();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container,fragment,TODO_FRAGMENT_TAG).commit();
+        }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,todoListFragment,TODO_FRAGMENT_TAG).commit();
     }
 }

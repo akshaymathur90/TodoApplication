@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -106,7 +105,6 @@ public class TodoItemsAdapter extends RecyclerView.Adapter<TodoItemsAdapter.Todo
             }
         });
     }
-
     public String getPriorityString(int priority){
         switch (priority){
             case 1: return "L";

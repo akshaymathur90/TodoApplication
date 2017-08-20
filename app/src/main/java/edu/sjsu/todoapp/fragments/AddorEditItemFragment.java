@@ -8,12 +8,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +45,11 @@ public class AddorEditItemFragment extends DialogFragment {
     String mDialogTitle = "Add Item";
     ToDoItem mToDoItem = null;
 
-    public TextView mTitleTextView;
+    //public TextView mTitleTextView;
     public TextInputEditText mItemTitle,mItemAssignedTo,mItemDueDate, mItemPriority;
     public AppCompatMultiAutoCompleteTextView mItemDesciption;
-    public AppCompatButton mCancelButton, mOkButton;
     public TextInputLayout mTitleLayout;
+    public Toolbar mToolbar;
     public static final String TODO_ITEM_KEY = "TODO ITEM";
     public static final String TODO_MODE_KEY = "MODE";
     public static final String TAG = "AddorEditItem";
@@ -69,11 +75,17 @@ public class AddorEditItemFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, R.style.AppTheme_NoActionBar);
         Bundle bundle = getArguments();
         if(bundle!=null){
-            mDialogTitle = "Edit Item";
             mToDoItem = (ToDoItem) bundle.getSerializable(TODO_ITEM_KEY);
             mode = bundle.getInt(TODO_MODE_KEY);
+        }
+        if(mode == 1){
+            mDialogTitle = "Edit Item";
+        }
+        else{
+            mDialogTitle = "Add Item";
         }
         TodoItemDbHelper dbHelper = new TodoItemDbHelper(getActivity());
         db = dbHelper.getWritableDatabase();
@@ -87,42 +99,27 @@ public class AddorEditItemFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_add_or_edit_item,container,false);
-        mTitleTextView = (TextView) v.findViewById(R.id.dialog_title);
+        mToolbar = (Toolbar) v.findViewById(R.id.my_toolbar);
+        mToolbar.setTitle(mDialogTitle);
+        mToolbar.setTitleTextColor(ContextCompat.getColor(getActivity(),android.R.color.primary_text_dark));
+
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+        }
+        setHasOptionsMenu(true);
+        //mTitleTextView = (TextView) v.findViewById(R.id.dialog_title);
         mItemTitle = (TextInputEditText) v.findViewById(R.id.todo_item_title_text);
         mItemDueDate = (TextInputEditText) v.findViewById(R.id.todo_item_due_date_text);
         mItemAssignedTo = (TextInputEditText) v.findViewById(R.id.todo_item_assigned_to_text);
         mItemDesciption = (AppCompatMultiAutoCompleteTextView) v.findViewById(R.id.todo_item_description_view);
-        mCancelButton = (AppCompatButton) v.findViewById(R.id.todo_item_cancel_button);
-        mOkButton = (AppCompatButton) v.findViewById(R.id.todo_item_ok_button);
         mTitleLayout = (TextInputLayout) v.findViewById(R.id.todo_item_title_layout);
         mItemPriority = (TextInputEditText) v.findViewById(R.id.todo_item_priority_text);
-        mTitleTextView.setText(mDialogTitle);
-
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-        mOkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(isTitleEmpty()){
-                    mTitleLayout.setError("Title cannot be empty");
-                    return;
-                }else {
-
-                    if (mode == 1) {
-                        editItem();
-                    } else {
-                        addItem();
-                    }
-                    dismiss();
-                }
-
-            }
-        });
+        //mTitleTextView.setText(mDialogTitle);
 
         if(mode==1){
             mItemTitle.setText(mToDoItem.getItemName());
@@ -149,6 +146,7 @@ public class AddorEditItemFragment extends DialogFragment {
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
             }
         });
+
         mItemPriority.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,6 +179,38 @@ public class AddorEditItemFragment extends DialogFragment {
         return v;
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.dialog_fragment_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG,"On options item selected called");
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                dismiss();
+                return true;
+            case R.id.menu_item_save:
+                if(isTitleEmpty()){
+                    mTitleLayout.setError("Title cannot be empty");
+                }else {
+
+                    if (mode == 1) {
+                        editItem();
+                    } else {
+                        addItem();
+                    }
+                    dismiss();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public boolean isTitleEmpty(){
         String title = mItemTitle.getText().toString();
         if(title!=null && !title.equals("")){
@@ -248,10 +278,10 @@ public class AddorEditItemFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
+       /* DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
-        getDialog().getWindow().setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+        getDialog().getWindow().setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);*/
     }
 
     @Override
@@ -273,6 +303,13 @@ public class AddorEditItemFragment extends DialogFragment {
             mItemDueDate.setText(date);
 
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow()
+                .getAttributes().windowAnimations = R.style.DialogAnimation;
     }
 
     @Override
